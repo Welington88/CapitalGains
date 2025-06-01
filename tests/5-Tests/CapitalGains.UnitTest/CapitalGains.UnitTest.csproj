@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
@@ -26,6 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CapitalGains\CapitalGains.csproj" />
+    <ProjectReference Include="..\..\..\src\3-Core\CapitalGains.Domain\CapitalGains.Domain.csproj" />
   </ItemGroup>
 </Project>

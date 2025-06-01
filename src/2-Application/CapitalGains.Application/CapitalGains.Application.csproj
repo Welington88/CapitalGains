@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="11.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="UseCases\" />
+    <None Remove="UseCases\ProcessStocks\" />
+    <None Remove="Commands\" />
+    <None Remove="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UseCases\" />
+    <Folder Include="UseCases\ProcessStocks\" />
+    <Folder Include="Commands\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\3-Core\CapitalGains.Domain\CapitalGains.Domain.csproj" />
+  </ItemGroup>
+</Project>

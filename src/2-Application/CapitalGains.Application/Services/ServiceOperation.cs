@@ -7,12 +7,12 @@ namespace CapitalGains.domain.stocks.service;
 
 public class ServiceOperation : IServiceOperation
 {
-    public string processListStocks(string inputJsonStocks)
+    public async Task<string> ProcessListStocks(string inputStocks)
     {
-        if (string.IsNullOrWhiteSpace(inputJsonStocks))
+        if (string.IsNullOrWhiteSpace(inputStocks))
             throw new Exception("input value cannot be empty or null")!;
 
-        var lines = inputJsonStocks
+        var lines = inputStocks
             .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
             .Select(line => line.Trim())
             .Where(line => line.StartsWith('[') && line.EndsWith(']'))
@@ -30,7 +30,7 @@ public class ServiceOperation : IServiceOperation
             float financialLossStock = 0;
             var subListTaxValueResult = new List<Result>();
 
-            foreach (var stock in listSimpleStocks)
+            foreach (var stock in listSimpleStocks!)
             {
                 if (stock.OperationType.Equals(TypeOperation.buy))
                 {
@@ -52,7 +52,7 @@ public class ServiceOperation : IServiceOperation
             outputs.Add(JsonConvert.SerializeObject(subListTaxValueResult, Formatting.None).Replace(".0}", ".00}"));
         }
 
-        return string.Join(Environment.NewLine, outputs);
+        return await Task.FromResult(string.Join(Environment.NewLine, outputs));
     }
 
     private static float weightedAveragePrice(List<Operation> listweightedAveragePrice)
