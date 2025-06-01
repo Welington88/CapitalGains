@@ -68,37 +68,41 @@ public class ServiceOperation : IServiceOperation
         return (float) Math.Round(weightedAverageStock,2);
     }
 
-    private decimal calculateSalesTax(Operation stock, int quantityOfStocksBought, float weightedAveragePriceResult, ref float financialLossStock)
+private decimal calculateSalesTax(Operation stock, int quantityOfStocksBought, float weightedAveragePriceResult, ref float financialLossStock)
+{
+    const float minimumValueToPayTax = 20000.00f;
+    const float taxPercentageFinal = 0.20f;
+    var totalValueOfTheOperation = (stock.UnitCost * stock.Quantity);
+    var gainOrLossFinancialResult = (stock.UnitCost - weightedAveragePriceResult) * stock.Quantity;
+
+    // Se venda isenta, não consome/prejudica o prejuízo acumulado
+    if (totalValueOfTheOperation <= minimumValueToPayTax)
     {
-        const float minimumValueToPayTax = 20000.00f;
-        const float taxPercentageFinal = 0.20f;
-        var totalValueOfTheOperation = (stock.UnitCost * stock.Quantity);
-        var totalSellValue = stock.Quantity * stock.UnitCost;
-        var totalBuyValue = stock.Quantity * weightedAveragePriceResult;
-        var gainOrLossFinancialResult = (stock.UnitCost - weightedAveragePriceResult) * stock.Quantity;
-        
-        gainOrLossFinancialResult += financialLossStock;
-
+        // Se prejuízo, acumula normalmente
         if (gainOrLossFinancialResult < 0)
-        {
-            financialLossStock = financialLossStock == 0 ? gainOrLossFinancialResult: financialLossStock -= gainOrLossFinancialResult;
-            return 0;
-        } else if (gainOrLossFinancialResult ==0)
-        {
-            financialLossStock = 0;
-            return 0;
-        }
-        else{
-            financialLossStock = 0;
-        }
-
-        if (totalValueOfTheOperation <= minimumValueToPayTax)
-        {
-            return 0;
-        } 
-        
-        return (decimal) (gainOrLossFinancialResult * taxPercentageFinal);
+            financialLossStock += gainOrLossFinancialResult;
+        return 0;
     }
+
+    // Só aqui compensa prejuízo acumulado
+    if (gainOrLossFinancialResult < 0)
+    {
+        financialLossStock += gainOrLossFinancialResult;
+        return 0;
+    }
+    else
+    {
+        if (financialLossStock < 0)
+        {
+            var compensable = Math.Min(-financialLossStock, gainOrLossFinancialResult);
+            gainOrLossFinancialResult -= compensable;
+            financialLossStock += compensable;
+        }
+        if (financialLossStock > 0) financialLossStock = 0;
+    }
+
+    return (decimal)(gainOrLossFinancialResult * taxPercentageFinal);
+}
 
     private List<Operation> sellReprocessWeightedAverageList(List<Operation> listweightedAveragePrice, Operation stock)
     {
