@@ -170,7 +170,7 @@ public class StockServiceTestCases
         Action action = 
                 () => operationServiceStock.processListStocks(inputJsonStocks);
 
-        var exception =  Assert.Throws<Exception>(action);
+        var exception =  Assert.Throws<InvalidOperationException>(action);
         Assert.Equal("number of shares for sell greater than the balance in wallet", exception.Message);
     }
 

@@ -37,11 +37,11 @@ public class ServiceOperation : IServiceOperation
                 {
                     if (stock.Quantity > quantityOfStocksBought)
                     {
-                        throw new Exception("number of shares for sell greater than the balance in wallet");
+                        throw new InvalidOperationException("number of shares for sell greater than the balance in wallet");
                     }
                     listweightedAveragePrice = sellReprocessWeightedAverageList(listweightedAveragePrice,stock);
                     quantityOfStocksBought -= stock.Quantity;
-                    taxValueResult = calculateSalesTax(stock, quantityOfStocksBought, weightedAveragePriceResult, ref financialLossStock);
+                    taxValueResult = calculateSalesTax(stock, weightedAveragePriceResult, ref financialLossStock);
                 }
                 subListTaxValueResult.Add(new Result(Math.Round(taxValueResult,2)));
             }
@@ -51,7 +51,7 @@ public class ServiceOperation : IServiceOperation
         return listTaxValueString;
     }
 
-    private float weightedAveragePrice(List<Operation> listweightedAveragePrice)
+    private static float weightedAveragePrice(List<Operation> listweightedAveragePrice)
     {
         var listStockMultiplication = new List<float>();
         foreach (var price in listweightedAveragePrice)
@@ -68,43 +68,40 @@ public class ServiceOperation : IServiceOperation
         return (float) Math.Round(weightedAverageStock,2);
     }
 
-private decimal calculateSalesTax(Operation stock, int quantityOfStocksBought, float weightedAveragePriceResult, ref float financialLossStock)
-{
-    const float minimumValueToPayTax = 20000.00f;
-    const float taxPercentageFinal = 0.20f;
-    var totalValueOfTheOperation = (stock.UnitCost * stock.Quantity);
-    var gainOrLossFinancialResult = (stock.UnitCost - weightedAveragePriceResult) * stock.Quantity;
+    private static decimal calculateSalesTax(Operation stock, float weightedAveragePriceResult, ref float financialLossStock)
+    {
+        const float minimumValueToPayTax = 20000.00f;
+        const float taxPercentageFinal = 0.20f;
+        var totalValueOfTheOperation = (stock.UnitCost * stock.Quantity);
+        var gainOrLossFinancialResult = (stock.UnitCost - weightedAveragePriceResult) * stock.Quantity;
 
-    // Se venda isenta, não consome/prejudica o prejuízo acumulado
-    if (totalValueOfTheOperation <= minimumValueToPayTax)
-    {
-        // Se prejuízo, acumula normalmente
-        if (gainOrLossFinancialResult < 0)
-            financialLossStock += gainOrLossFinancialResult;
-        return 0;
-    }
-
-    // Só aqui compensa prejuízo acumulado
-    if (gainOrLossFinancialResult < 0)
-    {
-        financialLossStock += gainOrLossFinancialResult;
-        return 0;
-    }
-    else
-    {
-        if (financialLossStock < 0)
+        if (totalValueOfTheOperation <= minimumValueToPayTax)
         {
-            var compensable = Math.Min(-financialLossStock, gainOrLossFinancialResult);
-            gainOrLossFinancialResult -= compensable;
-            financialLossStock += compensable;
+            if (gainOrLossFinancialResult < 0)
+                financialLossStock += gainOrLossFinancialResult;
+            return 0;
         }
-        if (financialLossStock > 0) financialLossStock = 0;
+        
+        if (gainOrLossFinancialResult < 0)
+            {
+                financialLossStock += gainOrLossFinancialResult;
+                return 0;
+            }
+            else
+            {
+                if (financialLossStock < 0)
+                {
+                    var compensable = Math.Min(-financialLossStock, gainOrLossFinancialResult);
+                    gainOrLossFinancialResult -= compensable;
+                    financialLossStock += compensable;
+                }
+                if (financialLossStock > 0) financialLossStock = 0;
+            }
+
+        return (decimal)(gainOrLossFinancialResult * taxPercentageFinal);
     }
 
-    return (decimal)(gainOrLossFinancialResult * taxPercentageFinal);
-}
-
-    private List<Operation> sellReprocessWeightedAverageList(List<Operation> listweightedAveragePrice, Operation stock)
+    private static List<Operation> sellReprocessWeightedAverageList(List<Operation> listweightedAveragePrice, Operation stock)
     {
         var countStocklSell = stock.Quantity;
     
@@ -121,10 +118,10 @@ private decimal calculateSalesTax(Operation stock, int quantityOfStocksBought, f
         return listweightedAveragePrice;
     }
 
-    private List<List<Operation>> convertJsonToObject(string inputJsonStocks)
+    private static List<List<Operation>> convertJsonToObject(string inputJsonStocks)
     {
         var resultConvertJsonToObject = new List<List<Operation>>();
-        int checkListOrManyLists = inputJsonStocks.Split(new char[]{ '[' }).Length - 1;
+        int checkListOrManyLists = inputJsonStocks.Split('[').Length - 1;
 
         if (checkListOrManyLists <= 1)
         {
@@ -138,11 +135,11 @@ private decimal calculateSalesTax(Operation stock, int quantityOfStocksBought, f
         return resultConvertJsonToObject;
     }
 
-    private string convertObjectToJson(List<List<Result>> listTaxValueResult)
+    private static string convertObjectToJson(List<List<Result>> listTaxValueResult)
     {
         var jsonResult = string.Empty;
         
-        if (listTaxValueResult.Count() <= 1)
+        if (listTaxValueResult.Count <= 1)
         {
             var listTaxValueResultSimple = listTaxValueResult.FirstOrDefault().ToList();
             jsonResult = JsonConvert.SerializeObject(listTaxValueResultSimple, Formatting.None);    
@@ -155,7 +152,7 @@ private decimal calculateSalesTax(Operation stock, int quantityOfStocksBought, f
         return jsonResult.Replace(".0}",".00}");
     }
 
-    private string convertDataList(string inputJsonStocks)
+    private static string convertDataList(string inputJsonStocks)
     {
         var replaceInputJsonStocks = inputJsonStocks.Replace("[","--[");
         var splitInputJsonStocks = replaceInputJsonStocks.Split("--");
