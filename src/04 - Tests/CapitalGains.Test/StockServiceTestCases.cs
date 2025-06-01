@@ -123,7 +123,7 @@ public class StockServiceTestCases
 
     [Theory(DisplayName = nameof(InstantiateServiceOperationCaseOneToCaseTwo))]
     [Trait("Domain","Stock - Service")]
-    [InlineData("[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 100}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}] [{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 10000}, {\"operation\":\"sell\", \"unit-cost\":20.00, \"quantity\": 5000}, {\"operation\":\"sell\", \"unit-cost\":5.00, \"quantity\": 5000}]")]
+    [InlineData("[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 100}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}]\n[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 10000}, {\"operation\":\"sell\", \"unit-cost\":20.00, \"quantity\": 5000}, {\"operation\":\"sell\", \"unit-cost\":5.00, \"quantity\": 5000}]")]
     public void InstantiateServiceOperationCaseOneToCaseTwo(string inputJsonStocks)
     {
         var operationServiceStock = new ServiceOperation();
@@ -131,12 +131,12 @@ public class StockServiceTestCases
 
         Assert.NotNull(operationServiceStock);
         Assert.IsType<string>(resultListStocks);
-        Assert.Equal("[{\"tax\":0.00},{\"tax\":0.00},{\"tax\":0.00}] [{\"tax\":0.00},{\"tax\":10000.00},{\"tax\":0.00}]", resultListStocks);
+        Assert.Equal("[{\"tax\":0.00},{\"tax\":0.00},{\"tax\":0.00}]\n[{\"tax\":0.00},{\"tax\":10000.00},{\"tax\":0.00}]", resultListStocks);
     }
 
     [Theory(DisplayName = nameof(InstantiateServiceOperationCaseOneToCaseThree))]
     [Trait("Domain","Stock - Service")]
-    [InlineData("[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 100}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}] [{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 10000}, {\"operation\":\"sell\", \"unit-cost\":5.00, \"quantity\": 5000}, {\"operation\":\"sell\", \"unit-cost\":20.00, \"quantity\": 3000}]")]
+    [InlineData("[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 100}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}]\n[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 10000}, {\"operation\":\"sell\", \"unit-cost\":5.00, \"quantity\": 5000}, {\"operation\":\"sell\", \"unit-cost\":20.00, \"quantity\": 3000}]")]
     public void InstantiateServiceOperationCaseOneToCaseThree(string inputJsonStocks)
     {
         var operationServiceStock = new ServiceOperation();
@@ -144,12 +144,12 @@ public class StockServiceTestCases
 
         Assert.NotNull(operationServiceStock);
         Assert.IsType<string>(resultListStocks);
-        Assert.Equal("[{\"tax\":0.00},{\"tax\":0.00},{\"tax\":0.00}] [{\"tax\":0.00},{\"tax\":0.00},{\"tax\":1000.00}]", resultListStocks);
+        Assert.Equal("[{\"tax\":0.00},{\"tax\":0.00},{\"tax\":0.00}]\n[{\"tax\":0.00},{\"tax\":0.00},{\"tax\":1000.00}]", resultListStocks);
     }
 
     [Theory(DisplayName = nameof(InstantiateServiceOperationCaseOneToCaseFour))]
     [Trait("Domain","Stock - Service")]
-    [InlineData("[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 100}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}] [{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 10000}, {\"operation\":\"buy\", \"unit-cost\":25.00, \"quantity\": 5000}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 10000}]")]
+    [InlineData("[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 100}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}]\n[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 10000}, {\"operation\":\"buy\", \"unit-cost\":25.00, \"quantity\": 5000}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 10000}]")]
     public void InstantiateServiceOperationCaseOneToCaseFour(string inputJsonStocks)
     {
         var operationServiceStock = new ServiceOperation();
@@ -157,12 +157,12 @@ public class StockServiceTestCases
 
         Assert.NotNull(operationServiceStock);
         Assert.IsType<string>(resultListStocks);
-        Assert.Equal("[{\"tax\":0.00},{\"tax\":0.00},{\"tax\":0.00}] [{\"tax\":0.00},{\"tax\":0.00},{\"tax\":0.00}]", resultListStocks);
+        Assert.Equal("[{\"tax\":0.00},{\"tax\":0.00},{\"tax\":0.00}]\n[{\"tax\":0.00},{\"tax\":0.00},{\"tax\":0.00}]", resultListStocks);
     }
 
     [Theory(DisplayName = nameof(ThrowWhenSellGreaterThanReserveOfBought))]
     [Trait("Domain","Stock - Service")]
-    [InlineData("[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 100}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 150}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}] [{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 10000}, {\"operation\":\"buy\", \"unit-cost\":25.00, \"quantity\": 5000}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 10000}]")]
+    [InlineData("[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 100}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 150}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}]\n[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 10000}, {\"operation\":\"buy\", \"unit-cost\":25.00, \"quantity\": 5000}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 10000}]")]
     [InlineData("[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 10000}, {\"operation\":\"sell\", \"unit-cost\":20.00, \"quantity\": 15000}, {\"operation\":\"sell\", \"unit-cost\":5.00, \"quantity\": 5000}]")]
     public void ThrowWhenSellGreaterThanReserveOfBought(string inputJsonStocks)
     {

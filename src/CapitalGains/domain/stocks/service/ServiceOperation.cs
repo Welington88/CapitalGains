@@ -9,46 +9,50 @@ public class ServiceOperation : IServiceOperation
 {
     public string processListStocks(string inputJsonStocks)
     {
-        if (string.IsNullOrEmpty(inputJsonStocks.Trim()))
-        {
+        if (string.IsNullOrWhiteSpace(inputJsonStocks))
             throw new Exception("input value cannot be empty or null")!;
-        }
 
-        var listResultConvertJsonToStocks = convertJsonToObject(inputJsonStocks);
-        var listweightedAveragePrice = new List<Operation>();
-        float weightedAveragePriceResult = 0;
-        int quantityOfStocksBought = 0;
-        decimal taxValueResult = 0;
-        float financialLossStock = 0;
-        var listTaxValueResult = new List<List<Result>>();
+        var lines = inputJsonStocks
+            .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+            .Select(line => line.Trim())
+            .Where(line => line.StartsWith('[') && line.EndsWith(']'))
+            .ToList();
 
-        foreach (var listSimpleStocks in listResultConvertJsonToStocks)
+        var outputs = new List<string>();
+
+        foreach (var line in lines)
         {
+            var listSimpleStocks = JsonConvert.DeserializeObject<List<Operation>>(line);
+            var listweightedAveragePrice = new List<Operation>();
+            float weightedAveragePriceResult = 0;
+            int quantityOfStocksBought = 0;
+            decimal taxValueResult = 0;
+            float financialLossStock = 0;
             var subListTaxValueResult = new List<Result>();
+
             foreach (var stock in listSimpleStocks)
             {
-                if(stock.OperationType.Equals(TypeOperation.buy))
+                if (stock.OperationType.Equals(TypeOperation.buy))
                 {
                     listweightedAveragePrice.Add(stock);
                     quantityOfStocksBought += stock.Quantity;
                     weightedAveragePriceResult = weightedAveragePrice(listweightedAveragePrice);
                     taxValueResult = 0;
-                } else if(stock.OperationType.Equals(TypeOperation.sell))
+                }
+                else if (stock.OperationType.Equals(TypeOperation.sell))
                 {
                     if (stock.Quantity > quantityOfStocksBought)
-                    {
                         throw new InvalidOperationException("number of shares for sell greater than the balance in wallet");
-                    }
-                    listweightedAveragePrice = sellReprocessWeightedAverageList(listweightedAveragePrice,stock);
+                    listweightedAveragePrice = sellReprocessWeightedAverageList(listweightedAveragePrice, stock);
                     quantityOfStocksBought -= stock.Quantity;
                     taxValueResult = calculateSalesTax(stock, weightedAveragePriceResult, ref financialLossStock);
                 }
-                subListTaxValueResult.Add(new Result(Math.Round(taxValueResult,2)));
+                subListTaxValueResult.Add(new Result(Math.Round(taxValueResult, 2)));
             }
-            listTaxValueResult.Add(subListTaxValueResult);
+            outputs.Add(JsonConvert.SerializeObject(subListTaxValueResult, Formatting.None).Replace(".0}", ".00}"));
         }
-        var listTaxValueString = convertObjectToJson(listTaxValueResult);
-        return listTaxValueString;
+
+        return string.Join(Environment.NewLine, outputs);
     }
 
     private static float weightedAveragePrice(List<Operation> listweightedAveragePrice)
@@ -116,50 +120,5 @@ public class ServiceOperation : IServiceOperation
         }
 
         return listweightedAveragePrice;
-    }
-
-    private static List<List<Operation>> convertJsonToObject(string inputJsonStocks)
-    {
-        var resultConvertJsonToObject = new List<List<Operation>>();
-        int checkListOrManyLists = inputJsonStocks.Split('[').Length - 1;
-
-        if (checkListOrManyLists <= 1)
-        {
-            var resultConvertJsonToObjectSimple = JsonConvert.DeserializeObject<List<Operation>>(inputJsonStocks);
-            resultConvertJsonToObject.Add(resultConvertJsonToObjectSimple);
-        } else {
-            inputJsonStocks = convertDataList(inputJsonStocks);
-            resultConvertJsonToObject = JsonConvert.DeserializeObject<List<List<Operation>>>(inputJsonStocks);
-        }
-
-        return resultConvertJsonToObject;
-    }
-
-    private static string convertObjectToJson(List<List<Result>> listTaxValueResult)
-    {
-        var jsonResult = string.Empty;
-        
-        if (listTaxValueResult.Count <= 1)
-        {
-            var listTaxValueResultSimple = listTaxValueResult.FirstOrDefault().ToList();
-            jsonResult = JsonConvert.SerializeObject(listTaxValueResultSimple, Formatting.None);    
-        } else {
-            var jsonResultReplace = JsonConvert.SerializeObject(listTaxValueResult, Formatting.None);    
-            var jsonResultRemoveFirstCharacter = jsonResultReplace.Replace(",["," [");   
-            jsonResult = jsonResultRemoveFirstCharacter.Substring(1, jsonResultRemoveFirstCharacter.Length-2);    
-        }
-
-        return jsonResult.Replace(".0}",".00}");
-    }
-
-    private static string convertDataList(string inputJsonStocks)
-    {
-        var replaceInputJsonStocks = inputJsonStocks.Replace("[","--[");
-        var splitInputJsonStocks = replaceInputJsonStocks.Split("--");
-        var joinInputJsonStocks = string.Join(",",splitInputJsonStocks);
-        var removeFirstCharacterInputJsonStocks = joinInputJsonStocks.Substring(1);
-        var resultConvertInputJsonStocks = string.Concat("[",removeFirstCharacterInputJsonStocks,"]");
-
-        return resultConvertInputJsonStocks;
     }
 }
