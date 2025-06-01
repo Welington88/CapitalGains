@@ -49,7 +49,7 @@ public class ServiceOperation : IServiceOperation
                 }
                 subListTaxValueResult.Add(new Result(Math.Round(taxValueResult, 2)));
             }
-            outputs.Add(JsonConvert.SerializeObject(subListTaxValueResult, Formatting.None).Replace(".0}", ".00}"));
+            outputs.Add(JsonConvert.SerializeObject(subListTaxValueResult, Formatting.None));
         }
 
         return await Task.FromResult(string.Join(Environment.NewLine, outputs));

@@ -10,7 +10,7 @@
 
 - A classe _ServiceOperation_ implementa a interface _IServiceOperation_ contrato de serviço.
 
-- Nela contém o método: _processListStocks_ recebe uma string como _input_ no terminal _cli_ que contém uma lista de transações com ações no formato JSON. E Verificando se a _string_ está vazia ou _nula_ e lança uma exceção caso esteja. Em seguida, ele chama o método _convertJsonToObject_ para converter a string JSON em uma lista de objetos _Operation_. Ele também cria as variáveis listResultConvertJsonToStocks, listweightedAveragePrice weightedAveragePriceResult, quantityOfStocksBought, taxValueResult, financialLossStock, listTaxValueResult que serão usadas depois.
+- Nela contém o método: _ProcessListStocks_ recebe uma string como _input_ no terminal _cli_ que contém uma lista de transações com ações no formato JSON. E Verificando se a _string_ está vazia ou _nula_ e lança uma exceção caso esteja. Em seguida, ele chama o método _convertJsonToObject_ para converter a string JSON em uma lista de objetos _Operation_. Ele também cria as variáveis listResultConvertJsonToStocks, listweightedAveragePrice weightedAveragePriceResult, quantityOfStocksBought, taxValueResult, financialLossStock, listTaxValueResult que serão usadas depois.
 
 - Logo depois, o método percorre a lista de transações, para cada transação, verifica se é uma compra ou venda. 
 

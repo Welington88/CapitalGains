@@ -11,7 +11,6 @@ public class ProcessStocksHandle : IRequestHandler<ProcessStocksCommand, string>
     public ProcessStocksHandle(IServiceOperation serviceOperation)
         => _serviceOperation = serviceOperation;
     
-
     public async Task<string> Handle(ProcessStocksCommand request, CancellationToken cancellationToken)
     {
        return await _serviceOperation.ProcessListStocks(request.ReadInputStocks!);
