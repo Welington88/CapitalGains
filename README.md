@@ -65,3 +65,73 @@ Para executar a aplicação fazendo o _input_ dos dados:
 ## 5. Notas adicionais que você considere importantes para a avaliação.
 
 - Projeto proposto era uma aplicação simples, que faça os cálculos em memória e entregue o resultado. Por esse motivo construir uma aplicação dentro desse princípio.
+
+# Fluxo da Aplicação de Cálculo de Imposto sobre Operações de Ações
+
+## 1. Leitura do Input
+
+O programa lê o conteúdo do arquivo de entrada (normalmente via redirecionamento `< arquivo.json`).  
+O conteúdo pode ser:
+- Um único array de operações.
+- Vários arrays, um por linha (cada linha = um cenário).
+- Um array de arrays.
+
+---
+
+## 2. Normalização do JSON
+
+O método `NormalizeJsonList` é chamado para garantir que o input seja um array de arrays.
+- Se o input for várias linhas, cada uma contendo um array, ele junta tudo em um array de arrays.
+- Se for um único array, ele encapsula em outro array.
+
+Isso garante que o parser sempre trabalhe com uma estrutura consistente.
+
+---
+
+## 3. Desserialização
+
+O método `convertJsonToOperations` usa `JsonConvert.DeserializeObject<List<List<Operation>>>` para transformar o JSON em uma lista de listas de operações.  
+Cada sublista representa um cenário de operações (compra/venda).
+
+---
+
+## 4. Processamento de Cada Cenário
+
+Para cada cenário (lista de operações):
+
+- Inicializa variáveis de controle:
+  - `listweightedAveragePrice`: histórico de compras para cálculo do preço médio.
+  - `quantityOfStocksBought`: quantidade de ações em carteira.
+  - `financialLossStock`: prejuízo acumulado para compensação futura.
+
+- Para cada operação:
+  - **Se for compra:**
+    - Adiciona à lista de compras.
+    - Atualiza o preço médio ponderado.
+    - Atualiza a quantidade em carteira.
+    - Imposto (`taxValueResult`) é sempre zero.
+  - **Se for venda:**
+    - Verifica se há ações suficientes para vender.
+    - Atualiza a lista de compras (removendo ações vendidas).
+    - Atualiza a quantidade em carteira.
+    - Calcula o imposto usando `calculateSalesTax`.
+
+- Para cada operação, adiciona o resultado (`tax`) a uma lista de resultados.
+
+---
+
+## 5. Cálculo do Imposto (`calculateSalesTax`)
+
+- Calcula o lucro/prejuízo da venda.
+- Se o valor da venda for menor ou igual a 20.000, não há imposto (mas prejuízo é acumulado).
+- Se houver prejuízo acumulado, ele é abatido do lucro antes de calcular o imposto.
+- O imposto é 20% sobre o lucro tributável.
+
+---
+
+## 6. Geração do Output
+
+- Para cada cenário, gera um array de objetos `{"tax": valor}`.
+- Serializa cada array de resultados em JSON.
+- Junta todos os cenários, separando por quebras de linha.
+- O output final é impresso ou retornado.
