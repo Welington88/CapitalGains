@@ -6,7 +6,7 @@ public class StockServiceTestCases
 {
     [Theory(DisplayName = nameof(InstantiateServiceOperationCaseOneAsync))]
     [Trait("Integration", "Stock - Service")]
-    [InlineData("[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 100}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}]")]
+    [InlineData("[\r\n    {\r\n        \"operation\": \"buy\",\r\n        \"unit-cost\": 10.00,\r\n        \"quantity\": 100\r\n    },\r\n    {\r\n        \"operation\": \"sell\",\r\n        \"unit-cost\": 15.00,\r\n        \"quantity\": 50\r\n    },\r\n    {\r\n        \"operation\": \"sell\",\r\n        \"unit-cost\": 15.00,\r\n        \"quantity\": 50\r\n    }\r\n]")]
     public async Task InstantiateServiceOperationCaseOneAsync(string inputJsonStocks)
     {
         var operationServiceStock = new ServiceOperation();
