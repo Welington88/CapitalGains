@@ -476,3 +476,10 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Rider
+.idea/*
+.idea/.idea.CapitalGains/.idea/encodings.xml
+.idea/.idea.CapitalGains/.idea/indexLayout.xml
+.idea/.idea.CapitalGains/.idea/vcs.xml
+.idea/.idea.CapitalGains/.idea/.gitignore
