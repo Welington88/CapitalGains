@@ -1,6 +1,6 @@
-using CapitalGains.domain.stocks.service;
+using CapitalGains.Application.Services;
 
-namespace CapitalGains.Test;
+namespace CapitalGains.IntegrationTests.Aplication;
 
 public class StockServiceTestCases
 {

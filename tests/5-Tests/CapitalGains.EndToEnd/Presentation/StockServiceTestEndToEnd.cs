@@ -1,5 +1,6 @@
 using System.Diagnostics;
-namespace CapitalGains.EndToEnd;
+
+namespace CapitalGains.EndToEnd.Presentation;
 
 public class StockServiceTestEndToEnd
 {

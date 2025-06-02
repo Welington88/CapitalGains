@@ -1,12 +1,13 @@
 using AutoBogus;
+using CapitalGains.Application.Commands;
 using CapitalGains.Application.UseCases.ProcessStocks;
-using CapitalGains.domain.stocks.entity;
-using CapitalGains.domain.stocks.enums;
-using CapitalGains.domain.stocks.interfaces;
+using CapitalGains.Domain.Business.Service;
+using CapitalGains.Domain.Entities;
+using CapitalGains.Domain.Enum;
 using Moq;
 using Newtonsoft.Json;
 
-namespace CapitalGains.Application.Commands.Tests;
+namespace CapitalGains.IntegrationTests.Aplication;
 
 public class ProcessStocksCommandTest
 {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using CapitalGains.domain.stocks.interfaces;
 using MediatR;
 using CapitalGains.Application.Commands;
-using CapitalGains.domain.stocks.service;
 using System.Reflection;
+using CapitalGains.Application.Services;
+using CapitalGains.Domain.Business.Service;
 
 namespace CapitalGains.CrossCutting.AppServiceConfig;
 

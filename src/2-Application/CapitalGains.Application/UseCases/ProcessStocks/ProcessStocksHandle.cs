@@ -1,5 +1,5 @@
 ﻿using CapitalGains.Application.Commands;
-using CapitalGains.domain.stocks.interfaces;
+using CapitalGains.Domain.Business.Service;
 using MediatR;
 
 namespace CapitalGains.Application.UseCases.ProcessStocks;

@@ -1,4 +1,4 @@
-namespace CapitalGains.domain.stocks.interfaces;
+namespace CapitalGains.Domain.Business.Service;
 
 public interface IServiceOperation
 {

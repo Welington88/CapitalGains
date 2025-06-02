@@ -1,9 +1,10 @@
-using CapitalGains.domain.stocks.entity;
-using CapitalGains.domain.stocks.enums;
-using CapitalGains.domain.stocks.interfaces;
+using CapitalGains.Domain.Business.Service;
+using CapitalGains.Domain.Entities;
+using CapitalGains.Domain.Enum;
+using CapitalGains.Domain.Ports;
 using Newtonsoft.Json;
 
-namespace CapitalGains.domain.stocks.service;
+namespace CapitalGains.Application.Services;
 
 public class ServiceOperation : IServiceOperation
 {

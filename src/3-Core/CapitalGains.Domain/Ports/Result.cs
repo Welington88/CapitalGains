@@ -1,7 +1,7 @@
-using CapitalGains.domain.stocks.exceptions;
+using CapitalGains.Domain.Validation;
 using Newtonsoft.Json;
 
-namespace CapitalGains.domain.stocks.entity;
+namespace CapitalGains.Domain.Ports;
 
 public class Result
 {

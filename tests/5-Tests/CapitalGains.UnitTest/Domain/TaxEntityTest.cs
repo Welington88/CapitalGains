@@ -1,7 +1,7 @@
-using CapitalGains.domain.stocks.entity;
-using CapitalGains.domain.stocks.exceptions;
+using CapitalGains.Domain.Ports;
+using CapitalGains.Domain.Validation;
 
-namespace CapitalGains.Test;
+namespace CapitalGains.UnitTest.Domain;
 
 public class TaxEntityTest
 {

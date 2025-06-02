@@ -1,4 +1,4 @@
-namespace CapitalGains.domain.stocks.enums;
+namespace CapitalGains.Domain.Enum;
 
 public enum TypeOperation
 {

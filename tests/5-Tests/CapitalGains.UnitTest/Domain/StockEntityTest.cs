@@ -1,8 +1,8 @@
-using CapitalGains.domain.stocks.entity;
-using CapitalGains.domain.stocks.enums;
-using CapitalGains.domain.stocks.exceptions;
+using CapitalGains.Domain.Entities;
+using CapitalGains.Domain.Enum;
+using CapitalGains.Domain.Validation;
 
-namespace CapitalGains.Test;
+namespace CapitalGains.UnitTest.Domain;
 
 public class StockEntityTest
 {

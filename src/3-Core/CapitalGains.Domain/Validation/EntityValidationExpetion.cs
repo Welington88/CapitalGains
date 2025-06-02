@@ -1,4 +1,4 @@
-namespace CapitalGains.domain.stocks.exceptions;
+namespace CapitalGains.Domain.Validation;
 
 public class EntityValidationExpetion : Exception
 {
