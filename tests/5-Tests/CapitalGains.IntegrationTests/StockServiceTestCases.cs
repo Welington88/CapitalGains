@@ -5,29 +5,29 @@ namespace CapitalGains.Test;
 public class StockServiceTestCases
 {
     [Theory(DisplayName = nameof(InstantiateServiceOperationCaseOneAsync))]
-    [Trait("Integration","Stock - Service")]
+    [Trait("Integration", "Stock - Service")]
     [InlineData("[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 100}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}, {\"operation\":\"sell\", \"unit-cost\":15.00, \"quantity\": 50}]")]
     public async Task InstantiateServiceOperationCaseOneAsync(string inputJsonStocks)
     {
         var operationServiceStock = new ServiceOperation();
         var resultListStocks = await operationServiceStock.ProcessListStocks(inputJsonStocks);
 
-        Assert.NotNull(operationServiceStock);
-        Assert.IsType<string>(resultListStocks);
-        Assert.Equal("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0}]", resultListStocks);
+        operationServiceStock.Should().NotBeNull();
+        resultListStocks.Should().BeOfType<string>();
+        resultListStocks.Should().Be("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0}]");
     }
 
     [Theory(DisplayName = nameof(InstantiateServiceOperationCaseTwoAsync))]
-    [Trait("Integration","Stock - Service")]
+    [Trait("Integration", "Stock - Service")]
     [InlineData("[{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 10000}, {\"operation\":\"sell\", \"unit-cost\":20.00, \"quantity\": 5000}, {\"operation\":\"sell\", \"unit-cost\":5.00, \"quantity\": 5000}]")]
     public async Task InstantiateServiceOperationCaseTwoAsync(string inputJsonStocks)
     {
         var operationServiceStock = new ServiceOperation();
         var resultListStocks = await operationServiceStock.ProcessListStocks(inputJsonStocks);
 
-        Assert.NotNull(operationServiceStock);
-        Assert.IsType<string>(resultListStocks);
-        Assert.Equal("[{\"tax\":0.0},{\"tax\":10000.0},{\"tax\":0.0}]",resultListStocks);
+        operationServiceStock.Should().NotBeNull();
+        resultListStocks.Should().BeOfType<string>();
+        resultListStocks.Should().Be("[{\"tax\":0.0},{\"tax\":10000.0},{\"tax\":0.0}]");
     }
 
     [Theory(DisplayName = nameof(InstantiateServiceOperationCaseThreeAsync))]
@@ -38,9 +38,9 @@ public class StockServiceTestCases
         var operationServiceStock = new ServiceOperation();
         var resultListStocks = await operationServiceStock.ProcessListStocks(inputJsonStocks);
 
-        Assert.NotNull(operationServiceStock);
-        Assert.IsType<string>(resultListStocks);
-        Assert.Equal("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":1000.0}]", resultListStocks);
+        operationServiceStock.Should().NotBeNull();
+        resultListStocks.Should().BeOfType<string>();
+        resultListStocks.Should().Be("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":1000.0}]");
     }
 
     [Theory(DisplayName = nameof(InstantiateServiceOperationCaseFourAsync))]
@@ -51,9 +51,10 @@ public class StockServiceTestCases
         var operationServiceStock = new ServiceOperation();
         var resultListStocks = await operationServiceStock.ProcessListStocks(inputJsonStocks);
 
-        Assert.NotNull(operationServiceStock);
-        Assert.IsType<string>(resultListStocks);
-        Assert.Equal("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0}]", resultListStocks);
+        operationServiceStock.Should().NotBeNull();
+        resultListStocks.Should().BeOfType<string>();
+        resultListStocks.Should().NotBeOfType<char>();
+        resultListStocks.Should().Be("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0}]");
     }
 
     [Theory(DisplayName = nameof(InstantiateServiceOperationCaseFiveAsync))]
@@ -64,9 +65,9 @@ public class StockServiceTestCases
         var operationServiceStock = new ServiceOperation();
         var resultListStocks = await operationServiceStock.ProcessListStocks(inputJsonStocks);
 
-        Assert.NotNull(operationServiceStock);
-        Assert.IsType<string>(resultListStocks);
-        Assert.Equal("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":10000.0}]",resultListStocks);
+        operationServiceStock.Should().NotBeNull();
+        resultListStocks.Should().BeOfType<string>();
+        resultListStocks.Should().Be("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":10000.0}]");
     }
 
     [Theory(DisplayName = nameof(InstantiateServiceOperationCaseSixAsync))]
@@ -77,9 +78,9 @@ public class StockServiceTestCases
         var operationServiceStock = new ServiceOperation();
         var resultListStocks = await operationServiceStock.ProcessListStocks(inputJsonStocks);
 
-        Assert.NotNull(operationServiceStock);
-        Assert.IsType<string>(resultListStocks);
-        Assert.Equal("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":3000.0}]", resultListStocks);
+        operationServiceStock.Should().NotBeNull();
+        resultListStocks.Should().BeOfType<string>();
+        resultListStocks.Should().Be("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":3000.0}]");
     }
 
     [Theory(DisplayName = nameof(InstantiateServiceOperationCaseSevenAsync))]
@@ -90,9 +91,10 @@ public class StockServiceTestCases
         var operationServiceStock = new ServiceOperation();
         var resultListStocks = await operationServiceStock.ProcessListStocks(inputJsonStocks);
 
-        Assert.NotNull(operationServiceStock);
-        Assert.IsType<string>(resultListStocks);
-        Assert.Equal("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":3000.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":3700.0},{\"tax\":0.0}]", resultListStocks);
+        operationServiceStock.Should().NotBeNull();
+        resultListStocks.Should().BeOfType<string>();
+        resultListStocks.Should().NotBeOfType<char>();
+        resultListStocks.Should().Be("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":3000.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":3700.0},{\"tax\":0.0}]");
     }
 
     [Theory(DisplayName = nameof(InstantiateServiceOperationCaseEightAsync))]
@@ -103,22 +105,24 @@ public class StockServiceTestCases
         var operationServiceStock = new ServiceOperation();
         var resultListStocks = await operationServiceStock.ProcessListStocks(inputJsonStocks);
 
-        Assert.NotNull(operationServiceStock);
-        Assert.IsType<string>(resultListStocks);
-        Assert.Equal("[{\"tax\":0.0},{\"tax\":80000.0},{\"tax\":0.0},{\"tax\":60000.0}]", resultListStocks);
+        operationServiceStock.Should().NotBeNull();
+        resultListStocks.Should().BeOfType<string>();
+        resultListStocks.Should().NotBeOfType<char>();
+        resultListStocks.Should().Be("[{\"tax\":0.0},{\"tax\":80000.0},{\"tax\":0.0},{\"tax\":60000.0}]");
     }
 
     [Theory(DisplayName = nameof(InstantiateServiceOperationCaseNineAsync))]
-    [Trait("Integration","Stock - Service")]
+    [Trait("Integration", "Stock - Service")]
     [InlineData("[{ \"operation\": \"buy\",  \"unit-cost\": 5000.00,  \"quantity\": 10 },{ \"operation\": \"sell\", \"unit-cost\": 4000.00,  \"quantity\": 5 },{ \"operation\": \"buy\",  \"unit-cost\": 15000.00, \"quantity\": 5 },{ \"operation\": \"buy\",  \"unit-cost\": 4000.00,  \"quantity\": 2 },{ \"operation\": \"buy\",  \"unit-cost\": 23000.00, \"quantity\": 2 },{ \"operation\": \"sell\", \"unit-cost\": 20000.00, \"quantity\": 1 },{ \"operation\": \"sell\", \"unit-cost\": 12000.00, \"quantity\": 10 },{ \"operation\": \"sell\", \"unit-cost\": 15000.00, \"quantity\": 3 }]")]
     public async Task InstantiateServiceOperationCaseNineAsync(string inputJsonStocks)
     {
         var operationServiceStock = new ServiceOperation();
         var resultListStocks = await operationServiceStock.ProcessListStocks(inputJsonStocks);
 
-        Assert.NotNull(operationServiceStock);
-        Assert.IsType<string>(resultListStocks);
-        Assert.Equal("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":1000.0},{\"tax\":2400.0}]", resultListStocks);
+        operationServiceStock.Should().NotBeNull();
+        resultListStocks.Should().BeOfType<string>();
+        resultListStocks.Should().NotBeOfType<char>();
+        resultListStocks.Should().Be("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":1000.0},{\"tax\":2400.0}]");
     }
 
     [Theory(DisplayName = nameof(InstantiateServiceOperationCaseOneToCaseTwoAsync))]
@@ -129,9 +133,10 @@ public class StockServiceTestCases
         var operationServiceStock = new ServiceOperation();
         var resultListStocks = await operationServiceStock.ProcessListStocks(inputJsonStocks);
 
-        Assert.NotNull(operationServiceStock);
-        Assert.IsType<string>(resultListStocks);
-        Assert.Equal("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0}]\n[{\"tax\":0.0},{\"tax\":10000.0},{\"tax\":0.0}]", resultListStocks);
+        operationServiceStock.Should().NotBeNull();
+        resultListStocks.Should().BeOfType<string>();
+        resultListStocks.Replace("\r\n", " ").Replace("\n", " ")
+            .Should().Be("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0}] [{\"tax\":0.0},{\"tax\":10000.0},{\"tax\":0.0}]");
     }
 
     [Theory(DisplayName = nameof(InstantiateServiceOperationCaseOneToCaseThreeAsync))]
@@ -142,9 +147,10 @@ public class StockServiceTestCases
         var operationServiceStock = new ServiceOperation();
         var resultListStocks = await operationServiceStock.ProcessListStocks(inputJsonStocks);
 
-        Assert.NotNull(operationServiceStock);
-        Assert.IsType<string>(resultListStocks);
-        Assert.Equal("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0}]\n[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":1000.0}]", resultListStocks);
+        operationServiceStock.Should().NotBeNull();
+        resultListStocks.Should().BeOfType<string>();
+        resultListStocks.Replace("\r\n", " ").Replace("\n", " ")
+        .Should().Be("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0}] [{\"tax\":0.0},{\"tax\":0.0},{\"tax\":1000.0}]");
     }
 
     [Theory(DisplayName = nameof(InstantiateServiceOperationCaseOneToCaseFourAsync))]
@@ -155,9 +161,11 @@ public class StockServiceTestCases
         var operationServiceStock = new ServiceOperation();
         var resultListStocks = await operationServiceStock.ProcessListStocks(inputJsonStocks);
 
-        Assert.NotNull(operationServiceStock);
-        Assert.IsType<string>(resultListStocks);
-        Assert.Equal("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0}]\n[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0}]", resultListStocks);
+        operationServiceStock.Should().NotBeNull();
+        resultListStocks.Should().BeOfType<string>();
+        resultListStocks.Should().NotBeOfType<char>();
+        resultListStocks.Replace("\r\n", " ").Replace("\n", " ")
+            .Should().Be("[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0}] [{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0}]");
     }
 
     [Theory(DisplayName = nameof(ThrowWhenSellGreaterThanReserveOfBought))]
@@ -170,8 +178,8 @@ public class StockServiceTestCases
         Action action = 
                 () => operationServiceStock.ProcessListStocks(inputJsonStocks).GetAwaiter().GetResult() ;
 
-        var exception =  Assert.Throws<InvalidOperationException>(action);
-        Assert.Equal("number of shares for sell greater than the balance in wallet", exception.Message);
+        action.Should().Throw<InvalidOperationException>()
+            .WithMessage("number of shares for sell greater than the balance in wallet");
     }
 
     [Theory(DisplayName = nameof(ThrowWhenTypeIsEmptyOrNull))]
@@ -183,7 +191,7 @@ public class StockServiceTestCases
         Action action = 
                 () => operationServiceStock.ProcessListStocks(inputJsonStocks).GetAwaiter().GetResult();
 
-        var exception =  Assert.Throws<Exception>(action);
-        Assert.Equal("input value cannot be empty or null", exception.Message);
+        action.Should().Throw<Exception>()
+            .WithMessage("input value cannot be empty or null");
     }
 }

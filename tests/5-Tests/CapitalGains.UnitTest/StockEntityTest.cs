@@ -7,16 +7,17 @@ namespace CapitalGains.Test;
 public class StockEntityTest
 {
     [Fact(DisplayName = nameof(InstantiateEntityOperation))]
-    [Trait("Domain","Stock - Entity")]
+    [Trait("Domain", "Stock - Entity")]
     public void InstantiateEntityOperation()
     {
         var numRandom = new Random();
-        var valueUnitCost = numRandom.Next(0,int.MaxValue);
-        var valueQuantity = numRandom.Next(0,int.MaxValue);
-        var validateObject = new {
+        var valueUnitCost = numRandom.Next(0, int.MaxValue);
+        var valueQuantity = numRandom.Next(0, int.MaxValue);
+        var validateObject = new
+        {
             OperationType = TypeOperation.buy,
             UnitCost = (float)valueUnitCost,
-            Quantity  = valueQuantity
+            Quantity = valueQuantity
         };
 
         var operationStock = new Operation(validateObject.OperationType,
@@ -24,10 +25,10 @@ public class StockEntityTest
                                     validateObject.Quantity
                                 );
 
-        Assert.NotNull(operationStock);
-        Assert.Equal(validateObject.OperationType, operationStock.OperationType);
-        Assert.Equal(validateObject.UnitCost, operationStock.UnitCost);
-        Assert.Equal(validateObject.Quantity, operationStock.Quantity);
+        operationStock.Should().NotBeNull();
+        operationStock.OperationType.Should().Be(validateObject.OperationType);
+        operationStock.UnitCost.Should().Be(validateObject.UnitCost);
+        operationStock.Quantity.Should().Be(validateObject.Quantity);
     }
 
     [Fact(DisplayName = nameof(ThrowWhenTypeIsEmptyOrNull))]
@@ -50,8 +51,8 @@ public class StockEntityTest
                                     validateObject.Quantity
                                 );
 
-        var exception =  Assert.Throws<EntityValidationExpetion>(action);
-        Assert.Equal("OperationType should not be empty or null", exception.Message);
+        action.Should().Throw<EntityValidationExpetion>()
+            .WithMessage("OperationType should not be empty or null");
     }
 
     [Fact(DisplayName = nameof(ThrowWhenTypeIsEmptyOrNullUnityCost))]
@@ -74,8 +75,8 @@ public class StockEntityTest
                                     validateObject.Quantity
                                 );
 
-        var exception =  Assert.Throws<EntityValidationExpetion>(action);
-        Assert.Equal("UnitCost should not be less than zero or null", exception.Message);
+        action.Should().Throw<EntityValidationExpetion>()
+            .WithMessage("UnitCost should not be less than zero or null");
     }
 
     [Fact(DisplayName = nameof(ThrowWhenTypeIsEmptyOrNullQuantity))]
@@ -97,8 +98,7 @@ public class StockEntityTest
                                     validateObject.UnitCost,
                                     validateObject.Quantity
                                 );
-                                
-        var exception =  Assert.Throws<EntityValidationExpetion>(action);
-        Assert.Equal("Quantity should not be less than zero or null", exception.Message);
+        action.Should().Throw<EntityValidationExpetion>()
+            .WithMessage("Quantity should not be less than zero or null");               
     }
 }

@@ -12,13 +12,13 @@ public class TaxEntityTest
         var numRandom = new Random();
         decimal valueTax = numRandom.Next(0,int.MaxValue);
         var validateObject = new {
-            Tax = (decimal)valueTax
+            Tax = (decimal?)valueTax
         };
         
-        var resultTax = new Result(validateObject.Tax);
+        var resultTax = new Result(validateObject.Tax.Value);
 
-        Assert.NotNull(resultTax);
-        Assert.Equal(validateObject.Tax, resultTax.Tax);
+        resultTax.Should().NotBeNull();
+        resultTax.Tax.Should().Be(validateObject.Tax.Value);
     }
 
     [Fact(DisplayName = nameof(ThrowWhenTypeIsEmptyOrNull))]
@@ -29,13 +29,13 @@ public class TaxEntityTest
         var numRandom = new Random();
         decimal valueTax = numRandom.Next(int.MinValue,0);
         var validateObject = new {
-            tax = (decimal)valueTax
+            tax = (decimal?)valueTax
         };
 
         Action action = 
-                () => new Result(validateObject.tax);
-                
-        var exception =  Assert.Throws<EntityValidationExpetion>(action);
-        Assert.Equal("Tax should not be less than zero or null", exception.Message);
+                () => new Result(validateObject.tax.Value);
+        
+        action.Should().Throw<EntityValidationExpetion>()
+            .WithMessage("Tax should not be less than zero or null");
     }
 }

@@ -72,11 +72,12 @@ public class StockServiceTestEndToEnd
                 expectedOutput = "[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0},{\"tax\":1000.0},{\"tax\":2400.0}]";
                 break;
             case "./inputs/input.case#1+case#2.json":
-                expectedOutput = "[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0}]\r\n[{\"tax\":0.0},{\"tax\":10000.0},{\"tax\":0.0}]";
+                expectedOutput = "[{\"tax\":0.0},{\"tax\":0.0},{\"tax\":0.0}] [{\"tax\":0.0},{\"tax\":10000.0},{\"tax\":0.0}]";
                 break;
         }
 
-        Assert.Contains(expectedOutput, output);
-        Assert.True(string.IsNullOrEmpty(error), $"Erro no processo: {error}");
+        output.Replace("\r\n", " ").Replace("\n", " ")
+            .Should().Contain(expectedOutput);
+        error.Should().BeEmpty();
     }
 }
