@@ -5,7 +5,7 @@ using CapitalGains.Application.Commands;
 using CapitalGains.domain.stocks.service;
 using System.Reflection;
 
-namespace BackEnd.CrossCutting.AppServiceConfig;
+namespace CapitalGains.CrossCutting.AppServiceConfig;
 
 public static class DependencyInjection
 {

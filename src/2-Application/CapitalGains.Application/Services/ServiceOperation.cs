@@ -12,13 +12,20 @@ public class ServiceOperation : IServiceOperation
         if (string.IsNullOrWhiteSpace(inputStocks))
             throw new Exception("input value cannot be empty or null")!;
 
-        var lines = inputStocks
+        var cleanedInput = inputStocks.Trim();
+
+        var lines = cleanedInput
             .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
             .Select(line => line.Trim())
             .Where(line => line.StartsWith('[') && line.EndsWith(']'))
             .ToList();
 
         var outputs = new List<string>();
+
+        if (lines.Count == 0)
+        {
+            lines.Add(cleanedInput);
+        }
 
         foreach (var line in lines)
         {
@@ -36,16 +43,16 @@ public class ServiceOperation : IServiceOperation
                 {
                     listweightedAveragePrice.Add(stock);
                     quantityOfStocksBought += stock.Quantity;
-                    weightedAveragePriceResult = weightedAveragePrice(listweightedAveragePrice);
+                    weightedAveragePriceResult = WeightedAveragePrice(listweightedAveragePrice);
                     taxValueResult = 0;
                 }
                 else if (stock.OperationType.Equals(TypeOperation.sell))
                 {
                     if (stock.Quantity > quantityOfStocksBought)
                         throw new InvalidOperationException("number of shares for sell greater than the balance in wallet");
-                    listweightedAveragePrice = sellReprocessWeightedAverageList(listweightedAveragePrice, stock);
+                    listweightedAveragePrice = SellReprocessWeightedAverageList(listweightedAveragePrice, stock);
                     quantityOfStocksBought -= stock.Quantity;
-                    taxValueResult = calculateSalesTax(stock, weightedAveragePriceResult, ref financialLossStock);
+                    taxValueResult = CalculateSalesTax(stock, weightedAveragePriceResult, ref financialLossStock);
                 }
                 subListTaxValueResult.Add(new Result(Math.Round(taxValueResult, 2)));
             }
@@ -55,7 +62,7 @@ public class ServiceOperation : IServiceOperation
         return await Task.FromResult(string.Join(Environment.NewLine, outputs));
     }
 
-    private static float weightedAveragePrice(List<Operation> listweightedAveragePrice)
+    private static float WeightedAveragePrice(List<Operation> listweightedAveragePrice)
     {
         var listStockMultiplication = new List<float>();
         foreach (var price in listweightedAveragePrice)
@@ -72,7 +79,7 @@ public class ServiceOperation : IServiceOperation
         return (float) Math.Round(weightedAverageStock,2);
     }
 
-    private static decimal calculateSalesTax(Operation stock, float weightedAveragePriceResult, ref float financialLossStock)
+    private static decimal CalculateSalesTax(Operation stock, float weightedAveragePriceResult, ref float financialLossStock)
     {
         const float minimumValueToPayTax = 20000.00f;
         const float taxPercentageFinal = 0.20f;
@@ -105,7 +112,7 @@ public class ServiceOperation : IServiceOperation
         return (decimal)(gainOrLossFinancialResult * taxPercentageFinal);
     }
 
-    private static List<Operation> sellReprocessWeightedAverageList(List<Operation> listweightedAveragePrice, Operation stock)
+    private static List<Operation> SellReprocessWeightedAverageList(List<Operation> listweightedAveragePrice, Operation stock)
     {
         var countStocklSell = stock.Quantity;
     

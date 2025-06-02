@@ -1,9 +1,8 @@
 ﻿
-using BackEnd.CrossCutting.AppServiceConfig;
+using CapitalGains.CrossCutting.AppServiceConfig;
 using CapitalGains.Application.Commands;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
+using MediatR;
 
 namespace CapitalGains.Console;
 

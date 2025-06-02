@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-Infrastructure", "4-Infra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapitalGains.CrossCutting", "src\4-Infrastructure\CapitalGains.CrossCutting\CapitalGains.CrossCutting.csproj", "{79B51A7E-7E57-4E7A-A64A-9C48F3FE5817}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapitalGains.EndToEnd", "tests\5-Tests\CapitalGains.EndToEnd\CapitalGains.EndToEnd.csproj", "{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,18 @@ Global
 		{79B51A7E-7E57-4E7A-A64A-9C48F3FE5817}.Release|x64.Build.0 = Release|Any CPU
 		{79B51A7E-7E57-4E7A-A64A-9C48F3FE5817}.Release|x86.ActiveCfg = Release|Any CPU
 		{79B51A7E-7E57-4E7A-A64A-9C48F3FE5817}.Release|x86.Build.0 = Release|Any CPU
+		{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}.Debug|x64.Build.0 = Debug|Any CPU
+		{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}.Debug|x86.Build.0 = Debug|Any CPU
+		{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}.Release|x64.ActiveCfg = Release|Any CPU
+		{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}.Release|x64.Build.0 = Release|Any CPU
+		{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}.Release|x86.ActiveCfg = Release|Any CPU
+		{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,5 +132,6 @@ Global
 		{94A95E95-D86D-4B28-AD0C-820A355B883E} = {C122D9FC-524D-A2BD-7B46-51152F76B8F5}
 		{A314748C-17CC-47B8-B04B-EC3B59A06D46} = {C122D9FC-524D-A2BD-7B46-51152F76B8F5}
 		{79B51A7E-7E57-4E7A-A64A-9C48F3FE5817} = {F7E8214F-53C2-3214-ED42-401E85FD48C9}
+		{F6A52F44-A050-4F13-9DF6-44FEA6E07A86} = {C122D9FC-524D-A2BD-7B46-51152F76B8F5}
 	EndGlobalSection
 EndGlobal
