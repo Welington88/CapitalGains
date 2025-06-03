@@ -7,10 +7,6 @@ namespace CapitalGains.Application.Business.Rules
         /// <summary>
         ///     Calcula o imposto sobre vendas de ações, considerando a média ponderada e possíveis perdas financeiras.
         /// </summary>
-        /// <param name="stock"></param>
-        /// <param name="weightedAveragePriceResult"></param>
-        /// <param name="financialLossStock"></param>
-        /// <returns></returns>
         public static decimal CalculateSalesTax(Operation stock, float weightedAveragePriceResult, ref float financialLossStock)
         {
             const float minimumValueToPayTax = 20000.00f;

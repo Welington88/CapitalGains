@@ -9,8 +9,6 @@ namespace CapitalGains.Application.Business.Rules
         /// <summary>
         ///     Calcula o preço médio ponderado de uma lista de operações de compra.
         /// </summary>
-        /// <param name="weightedAverageList"></param>
-        /// <returns cref="float">Preço Médio</returns>
         public static float WeightedAveragePrice(List<Operation> weightedAverageList)
         {
             var listStockMultiplication = weightedAverageList
@@ -28,9 +26,6 @@ namespace CapitalGains.Application.Business.Rules
         /// <summary>
         ///     Reprocessa a lista de média ponderada após uma venda, ajustando as quantidades das operações restantes.
         /// </summary>
-        /// <param name="weightedAverageList"></param>
-        /// <param name="stock"></param>
-        /// <returns></returns>
         public static void SellReprocessWeightedAverageList(List<Operation> weightedAverageList, Operation stock)
         {
             var countStockSell = stock.Quantity;
