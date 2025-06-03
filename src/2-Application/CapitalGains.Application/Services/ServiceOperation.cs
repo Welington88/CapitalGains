@@ -1,3 +1,4 @@
+using CapitalGains.Application.Business.Rules;
 using CapitalGains.Domain.Business.Service;
 using CapitalGains.Domain.Entities;
 using CapitalGains.Domain.Enum;
@@ -13,120 +14,111 @@ public class ServiceOperation : IServiceOperation
         if (string.IsNullOrWhiteSpace(inputStocks))
             throw new Exception("input value cannot be empty or null")!;
 
-        var cleanedInput = inputStocks.Trim();
-
-        var lines = cleanedInput
-            .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
-            .Select(line => line.Trim())
-            .Where(line => line.StartsWith('[') && line.EndsWith(']'))
-            .ToList();
+        var inputData = inputStocks.Trim();
+        var lines = GetJsonLines(inputData);
 
         var outputs = new List<string>();
 
-        if (lines.Count == 0)
-        {
-            lines.Add(cleanedInput);
-        }
-
         foreach (var line in lines)
         {
-            var listSimpleStocks = JsonConvert.DeserializeObject<List<Operation>>(line);
-            var listweightedAveragePrice = new List<Operation>();
-            float weightedAveragePriceResult = 0;
-            int quantityOfStocksBought = 0;
-            decimal taxValueResult = 0;
-            float financialLossStock = 0;
-            var subListTaxValueResult = new List<Result>();
-
-            foreach (var stock in listSimpleStocks!)
-            {
-                if (stock.OperationType.Equals(TypeOperation.buy))
-                {
-                    listweightedAveragePrice.Add(stock);
-                    quantityOfStocksBought += stock.Quantity;
-                    weightedAveragePriceResult = WeightedAveragePrice(listweightedAveragePrice);
-                    taxValueResult = 0;
-                }
-                else if (stock.OperationType.Equals(TypeOperation.sell))
-                {
-                    if (stock.Quantity > quantityOfStocksBought)
-                        throw new InvalidOperationException("number of shares for sell greater than the balance in wallet");
-                    listweightedAveragePrice = SellReprocessWeightedAverageList(listweightedAveragePrice, stock);
-                    quantityOfStocksBought -= stock.Quantity;
-                    taxValueResult = CalculateSalesTax(stock, weightedAveragePriceResult, ref financialLossStock);
-                }
-                subListTaxValueResult.Add(new Result(Math.Round(taxValueResult, 2)));
-            }
-            outputs.Add(JsonConvert.SerializeObject(subListTaxValueResult, Formatting.None));
+            var operations = DeserializeOperations(line);
+            var results = ProcessOperationResults(operations);
+            outputs.Add(JsonConvert.SerializeObject(results, Formatting.None));
         }
 
         return await Task.FromResult(string.Join(Environment.NewLine, outputs));
     }
 
-    private static float WeightedAveragePrice(List<Operation> listweightedAveragePrice)
+    /// <summary>
+    ///     Extrai linhas JSON dos dados de entrada, a linha inicia com '[' e terminar com ']'.
+    /// </summary>
+    /// <param name="inputData"></param>
+    /// <returns>Lista Operações(String)</returns>
+    private static IEnumerable<string> GetJsonLines(string inputData)
     {
-        var listStockMultiplication = new List<float>();
-        foreach (var price in listweightedAveragePrice)
-        {
-            if (price.OperationType.Equals(TypeOperation.buy) && price.Quantity > 0)
-            {
-                var resultStockMultiplication = (price.Quantity * price.UnitCost);
-                listStockMultiplication.Add(resultStockMultiplication);
-            }
-        }
+        var lines = inputData
+            .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+            .Select(line => line.Trim())
+            .Where(line => line.StartsWith('[') && line.EndsWith(']'))
+            .ToList();
 
-        var weightedAverageStock = listStockMultiplication.Sum(s => s) / listweightedAveragePrice.Sum(s => s.Quantity);
+        if (lines.Count == 0)
+            lines.Add(inputData);
 
-        return (float) Math.Round(weightedAverageStock,2);
+        return lines;
     }
 
-    private static decimal CalculateSalesTax(Operation stock, float weightedAveragePriceResult, ref float financialLossStock)
-    {
-        const float minimumValueToPayTax = 20000.00f;
-        const float taxPercentageFinal = 0.20f;
-        var totalValueOfTheOperation = (stock.UnitCost * stock.Quantity);
-        var gainOrLossFinancialResult = (stock.UnitCost - weightedAveragePriceResult) * stock.Quantity;
-
-        if (totalValueOfTheOperation <= minimumValueToPayTax)
-        {
-            if (gainOrLossFinancialResult < 0)
-                financialLossStock += gainOrLossFinancialResult;
-            return 0;
-        }
-        
-        if (gainOrLossFinancialResult < 0)
-            {
-                financialLossStock += gainOrLossFinancialResult;
-                return 0;
-            }
-            else
-            {
-                if (financialLossStock < 0)
-                {
-                    var compensable = Math.Min(-financialLossStock, gainOrLossFinancialResult);
-                    gainOrLossFinancialResult -= compensable;
-                    financialLossStock += compensable;
-                }
-                if (financialLossStock > 0) financialLossStock = 0;
-            }
-
-        return (decimal)(gainOrLossFinancialResult * taxPercentageFinal);
-    }
-
-    private static List<Operation> SellReprocessWeightedAverageList(List<Operation> listweightedAveragePrice, Operation stock)
-    {
-        var countStocklSell = stock.Quantity;
+    /// <summary>
+    ///     Desserializa uma string JSON em uma lista de operações.
+    /// </summary>
+    /// <param name="json"></param>
+    /// <returns>Lista Operações Deserializadas</returns>
+    private static List<Operation> DeserializeOperations(string json)
+        => JsonConvert.DeserializeObject<List<Operation>>(json)!;
     
-        foreach (var stockPrice in listweightedAveragePrice)
+    /// <summary>
+    ///     Processa os resultados das operações, calculando o imposto devido para cada operação.
+    /// </summary>
+    /// <param name="operations"></param>
+    /// <returns></returns>
+    private static List<Result> ProcessOperationResults(List<Operation> operations)
+    {
+        var results = new List<Result>();
+        var weightedAverageList = new List<Operation>();
+        float weightedAveragePrice = 0;
+        int quantityInWallet = 0;
+        decimal taxValue = 0;
+        float financialLoss = 0;
+
+        foreach (var trade in operations)
         {
-            var newStockPrice = stockPrice;
-            if (countStocklSell > 0 && newStockPrice.Quantity >= countStocklSell)
+            if (trade.OperationType.Equals(TypeOperation.buy))
             {
-                newStockPrice.Quantity -= countStocklSell;
-                countStocklSell -= newStockPrice.Quantity;
+                ProcessBuy(trade, weightedAverageList, ref quantityInWallet, ref weightedAveragePrice, ref taxValue);
             }
+            else if (trade.OperationType.Equals(TypeOperation.sell))
+            {
+                ProcessSell(trade, weightedAverageList, ref quantityInWallet, ref weightedAveragePrice, ref taxValue, ref financialLoss);
+            }
+            results.Add(new Result(Math.Round(taxValue, 2)));
         }
 
-        return listweightedAveragePrice;
+        return results;
+    }
+
+    /// <summary>
+    ///     Processa uma operação de compra, atualizando a lista de média ponderada, quantidade em carteira e preço médio ponderado.
+    /// </summary>
+    /// <param name="buyOperation"></param>
+    /// <param name="weightedAverageList"></param>
+    /// <param name="quantityInWallet"></param>
+    /// <param name="weightedAveragePrice"></param>
+    /// <param name="taxValue"></param>
+    private static void ProcessBuy(Operation buyOperation, List<Operation> weightedAverageList, ref int quantityInWallet, ref float weightedAveragePrice, ref decimal taxValue)
+    {
+        weightedAverageList.Add(buyOperation);
+        quantityInWallet += buyOperation.Quantity;
+        weightedAveragePrice = TradeRules.WeightedAveragePrice(weightedAverageList);
+        taxValue = 0;
+    }
+
+    /// <summary>
+    ///     Processa uma operação de venda, atualizando a lista de média ponderada, quantidade em carteira e calculando o imposto devido.
+    /// </summary>
+    /// <param name="sellOperation"></param>
+    /// <param name="weightedAverageList"></param>
+    /// <param name="quantityInWallet"></param>
+    /// <param name="weightedAveragePrice"></param>
+    /// <param name="taxValue"></param>
+    /// <param name="financialLoss"></param>
+    /// <exception cref="InvalidOperationException"></exception>
+    /// <returns></returns>
+    private static void ProcessSell(Operation sellOperation, List<Operation> weightedAverageList, ref int quantityInWallet, ref float weightedAveragePrice, ref decimal taxValue, ref float financialLoss)
+    {
+        if (sellOperation.Quantity > quantityInWallet)
+            throw new InvalidOperationException("number of shares for sell greater than the balance in wallet");
+        TradeRules.SellReprocessWeightedAverageList(weightedAverageList, sellOperation);
+        quantityInWallet -= sellOperation.Quantity;
+        taxValue = TaxRule.CalculateSalesTax(sellOperation, weightedAveragePrice, ref financialLoss);
     }
 }
