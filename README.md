@@ -27,7 +27,28 @@ dotnet run --project ./src/1-Presentation/CapitalGains.Console/ < ./tests/5-Test
 ```
 Você pode substituir o arquivo de entrada pelo caminho desejado.
 
-## 4. Executando os Testes
+## 4. Executando a Aplicação Builds conteinerizadas
+
+Execute na raiz do projeto:
+
+- **Suba os containers em background (build automático):**
+   ```sh
+   docker-compose -f docker-compose.yml up -d
+   ```
+
+- **Se container não abrir o terminal, abra um terminal interativo dentro do container da aplicação:**
+   ```sh
+   docker-compose run --entrypoint /bin/bash capitalgains.console
+   ```
+
+- **Dentro do terminal do container, execute a aplicação manualmente:**
+   ```sh
+   dotnet CapitalGains.Console.dll
+   ```
+
+_Execução interativa (linha a linha) você pode digitar o input diretamente no terminal do container, ou redirecionar arquivos conforme desejar._
+
+## 5. Executando os Testes
 Para rodar todos os testes (unitários, integração e end-to-end), execute na raiz do projeto:
 
 - Testes unitários (Domain):
@@ -47,7 +68,7 @@ Para rodar todos os testes (unitários, integração e end-to-end), execute na r
    
 <img width="440" alt="Image" src="https://github.com/user-attachments/assets/0716023a-1c50-4b06-8655-b0a01ea31571" />
 
-## 5. Observações
+## 6. Observações
 - O input deve ser um JSON válido, conforme exemplos na pasta `Inputs`.
 ```sh
 [{ "operation": "buy",  "unit-cost": 10.00, "quantity": 100 },{ "operation": "sell", "unit-cost": 15.00, "quantity": 50 }]

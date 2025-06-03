@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  capitalgains.console:
+    image: ${DOCKER_REGISTRY-}capitalgains
+    build:
+      context: .
+      dockerfile: src/1-Presentation/CapitalGains.Console/Dockerfile

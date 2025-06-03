@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapitalGains.CrossCutting",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapitalGains.EndToEnd", "tests\5-Tests\CapitalGains.EndToEnd\CapitalGains.EndToEnd.csproj", "{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{EC709651-EE09-4621-95F6-971DCC07CC23}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,18 @@ Global
 		{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}.Release|x64.Build.0 = Release|Any CPU
 		{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}.Release|x86.ActiveCfg = Release|Any CPU
 		{F6A52F44-A050-4F13-9DF6-44FEA6E07A86}.Release|x86.Build.0 = Release|Any CPU
+		{EC709651-EE09-4621-95F6-971DCC07CC23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC709651-EE09-4621-95F6-971DCC07CC23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC709651-EE09-4621-95F6-971DCC07CC23}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EC709651-EE09-4621-95F6-971DCC07CC23}.Debug|x64.Build.0 = Debug|Any CPU
+		{EC709651-EE09-4621-95F6-971DCC07CC23}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EC709651-EE09-4621-95F6-971DCC07CC23}.Debug|x86.Build.0 = Debug|Any CPU
+		{EC709651-EE09-4621-95F6-971DCC07CC23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC709651-EE09-4621-95F6-971DCC07CC23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC709651-EE09-4621-95F6-971DCC07CC23}.Release|x64.ActiveCfg = Release|Any CPU
+		{EC709651-EE09-4621-95F6-971DCC07CC23}.Release|x64.Build.0 = Release|Any CPU
+		{EC709651-EE09-4621-95F6-971DCC07CC23}.Release|x86.ActiveCfg = Release|Any CPU
+		{EC709651-EE09-4621-95F6-971DCC07CC23}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
