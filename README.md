@@ -8,7 +8,7 @@
 Abra um terminal na raiz do projeto e execute:
 ```sh
 dotnet restore ./CapitalGains.sln      # Baixa as dependências
-dotnet build ./CapitalGains.sln        # Compila a aplicação
+dotnet build   ./CapitalGains.sln      # Compila a aplicação
 ```
 
 ## 3. Executando a Aplicação
