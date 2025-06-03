@@ -1,137 +1,56 @@
 # Capital Gains
 
-## 1. Uma explicação sobre as decisões técnicas e arquiteturais do seu desafio:
+## 1. Pré-requisitos
+- Instale o [.NET SDK 8.0](https://dotnet.microsoft.com/pt-br/download/dotnet/8.0) em sua máquina.
+- Para melhor experiência, utilize o **Visual Studio Code**, **Visual Studio** ou outro editor compatível com .NET.
 
-- Por ser uma aplicação simples, foi desenvolvido apenas o core da aplicação as entidades de domínio e o service que processa os dados da aplicação onde se encontra a regras de negócio, em linguagem **C#** utilizando **.net core 6**.
+## 2. Compilando o Projeto
+Abra um terminal na raiz do projeto e execute:
+```sh
+dotnet restore      # Baixa as dependências
+dotnet build        # Compila a aplicação
+```
 
-- Com isso foi desenvolvido testes unitário e de integração para testar as entidades e processamento da aplicação.
+## 3. Executando a Aplicação
+A aplicação principal é um CLI que lê o input via stdin (entrada padrão).
 
-- Foi implementado um serviço que processa um conjunto de transações com ações e retorna o valor total de impostos devido para cada transação.
+### Execução interativa (linha a linha)
+Execute:
+```sh
+dotnet run --project ./src/1-Presentation/CapitalGains.Console/
+```
+Digite cada linha de input e pressione `Enter`. Para finalizar a entrada, envie uma linha vazia (apenas pressione `Enter`).
 
-- A classe _ServiceOperation_ implementa a interface _IServiceOperation_ contrato de serviço.
+### Execução com redirecionamento de arquivo
+```sh
+dotnet run --project ./src/1-Presentation/CapitalGains.Console/ < ./tests/5-Tests/CapitalGains.EndToEnd/Inputs/input.case#1.json
+```
+Você pode substituir o arquivo de entrada pelo caminho desejado.
 
-- Nela contém o método: _ProcessListStocks_ recebe uma string como _input_ no terminal _cli_ que contém uma lista de transações com ações no formato JSON. E Verificando se a _string_ está vazia ou _nula_ e lança uma exceção caso esteja. Em seguida, ele chama o método _convertJsonToObject_ para converter a string JSON em uma lista de objetos _Operation_. Ele também cria as variáveis listResultConvertJsonToStocks, listweightedAveragePrice weightedAveragePriceResult, quantityOfStocksBought, taxValueResult, financialLossStock, listTaxValueResult que serão usadas depois.
+## 4. Executando os Testes
+Para rodar todos os testes (unitários, integração e end-to-end), execute na raiz do projeto:
 
-- Logo depois, o método percorre a lista de transações, para cada transação, verifica se é uma compra ou venda. 
+- Testes unitários (Domain):
+  ```sh
+  dotnet test ./tests/5-Tests/CapitalGains.UnitTest
+  ```
+- Testes de integração (Application -> Domain):
+  ```sh
+  dotnet test ./tests/5-Tests/CapitalGains.IntegrationTests
+  ```
+- Testes End-to-End (Presentation -> Application -> Domain):
+  ```sh
+  dotnet test ./tests/5-Tests/CapitalGains.EndToEnd
+  ```
+- Teste Coverage
 
-- Se for uma compra, a transação é adicionada a uma lista de transações de compra e a quantidade total de ações compradas é atualizada. O método também calcula a média ponderada do preço de compra. 
+   
+<img width="440" alt="Image" src="https://github.com/user-attachments/assets/0716023a-1c50-4b06-8655-b0a01ea31571" />
 
-- Se for uma venda, o método verifica se a quantidade de ações vendidas é maior do que a quantidade de ações compradas. Se for o caso, uma exceção é lançada. Caso contrário, o método chama o método _sellReprocessWeightedAverageList_ para atualizar a lista de transações de compra e remover as ações vendidas. Em seguida, ele chama o método _calculateSalesTax_ para calcular o valor do imposto devido e atualiza a variável _financialLossStock_ com o valor do ganho ou perda financeira da transação.
-
-- O método _calculateSalesTax_ calcula o valor do imposto devido para uma transação de venda. Ele verifica se o valor total da transação é inferior a um valor mínimo que é tributável e retorna zero se for o caso. Caso contrário, ele calcula o ganho ou perda financeira da transação e verifica se é negativo. Se for negativo, ele atualiza a variável _financialLossStock_ com o valor da perda. Caso contrário, ele calcula o valor do imposto com base no ganho financeiro e em uma taxa fixa.
-
-- O método _sellReprocessWeightedAverageList_ remove as ações vendidas da lista de transações de compra. Ele percorre a lista de transações de compra e remove as ações vendidas até que todas as ações vendidas tenham sido removidas.
-
-- O método _convertJsonToObject_ converte a string JSON em uma lista de objetos _Operation_. Ele verifica se a _string_ JSON contém uma lista de listas ou uma lista simples e executa a conversão apropriada.
-
-- O método _convertObjectToJson_ converte uma lista de listas de objetos _Tax_ em uma string JSON. Ele verifica se a lista contém uma lista simples ou várias listas e executa a conversão apropriada. reazlizando o _OutPut_ para terminal final.
-
-## 2. Uma justificativa para o uso de frameworks ou bibliotecas (caso sejam usadas);
-
-Na aplicação não utilizei nenhum framework em si, utilizei apenas a biblioteca [_Newtonsoft.Json_](https://www.nuget.org/packages/Newtonsoft.Json/).
-
-- [x] A biblioteca Newtonsoft.Json foi utilizada para converter objetos .NET em formato JSON e vice-versa. Ele suporta a serialização e desserialização de objetos complexos, como arrays, dicionários, tipos anônimos e objetos aninhados. 
-- [x] Ela foi utilizada para receber o arquivo .json converter em objeto e vice-versa.
-
-Já no projeto de tests foi necessário utilizar o framework de tests [_xUnit_](https://www.nuget.org/packages/xunit) .
-
-- [x] _xUnit_ é um framework de teste de unidade para _.NET_ que permite criar e executar testes automatizados em _C#_, _F#_ e outros idiomas _.NET_. Ele é inspirado no _JUnit_ e em outros frameworks de teste de unidade para outras linguagens de programação.
-
-- [x] O _xUnit_ é um framework gratuito e de código aberto que segue uma abordagem de convenção sobre configuração. Isso significa que ele fornece um conjunto de convenções que você pode usar para escrever seus testes, em vez de exigir que você configure manualmente cada aspecto do seu ambiente de teste.
-
-## 3. Instruções sobre como compilar e executar o projeto;
-
-Para executar a aplicação, é necessário ter instalado o _sdk .net core 6_ para instalar caso necessário acesse o link: [clique aqui!](https://dotnet.microsoft.com/en-us/download/dotnet/6.0), para verificar se o sdk já está instalado em sua máquina digite no terminal: `dotnet --list-sdks` verifique se a versão 6 está instalada, caso não, faça a instalação. 
-
-Na Pasta Raiz abra um terminal e digite os comandos, exemplos de terminais _Terminal Bash_ ou _Power Shell_;
-
-Para acessar pasta da aplicação:
-- `cd src/CapitalGains/`
-
-Para executar a aplicação fazendo o _input_ dos dados:
-- Input bash: `dotnet run` 
-- Input Redirection: `dotnet run < ./input.txt`
-
-## 4. Instruções sobre como executar os testes da solução;
-
-Na Pasta Raiz abra um terminal e digite os comandos;
-
-Para acessar pasta da aplicação de testes:
-- `cd src/CapitalGains.Test/`
-
-Para executar a aplicação fazendo o _input_ dos dados:
-- Input bash: `dotnet test`
-
-## 5. Notas adicionais que você considere importantes para a avaliação.
-
-- Projeto proposto era uma aplicação simples, que faça os cálculos em memória e entregue o resultado. Por esse motivo construir uma aplicação dentro desse princípio.
-
-# Fluxo da Aplicação de Cálculo de Imposto sobre Operações de Ações
-
-## 1. Leitura do Input
-
-O programa lê o conteúdo do arquivo de entrada (normalmente via redirecionamento `< arquivo.json`).  
-O conteúdo pode ser:
-- Um único array de operações.
-- Vários arrays, um por linha (cada linha = um cenário).
-- Um array de arrays.
-
----
-
-## 2. Normalização do JSON
-
-O método `NormalizeJsonList` é chamado para garantir que o input seja um array de arrays.
-- Se o input for várias linhas, cada uma contendo um array, ele junta tudo em um array de arrays.
-- Se for um único array, ele encapsula em outro array.
-
-Isso garante que o parser sempre trabalhe com uma estrutura consistente.
-
----
-
-## 3. Desserialização
-
-O método `convertJsonToOperations` usa `JsonConvert.DeserializeObject<List<List<Operation>>>` para transformar o JSON em uma lista de listas de operações.  
-Cada sublista representa um cenário de operações (compra/venda).
-
----
-
-## 4. Processamento de Cada Cenário
-
-Para cada cenário (lista de operações):
-
-- Inicializa variáveis de controle:
-  - `listweightedAveragePrice`: histórico de compras para cálculo do preço médio.
-  - `quantityOfStocksBought`: quantidade de ações em carteira.
-  - `financialLossStock`: prejuízo acumulado para compensação futura.
-
-- Para cada operação:
-  - **Se for compra:**
-    - Adiciona à lista de compras.
-    - Atualiza o preço médio ponderado.
-    - Atualiza a quantidade em carteira.
-    - Imposto (`taxValueResult`) é sempre zero.
-  - **Se for venda:**
-    - Verifica se há ações suficientes para vender.
-    - Atualiza a lista de compras (removendo ações vendidas).
-    - Atualiza a quantidade em carteira.
-    - Calcula o imposto usando `calculateSalesTax`.
-
-- Para cada operação, adiciona o resultado (`tax`) a uma lista de resultados.
-
----
-
-## 5. Cálculo do Imposto (`calculateSalesTax`)
-
-- Calcula o lucro/prejuízo da venda.
-- Se o valor da venda for menor ou igual a 20.000, não há imposto (mas prejuízo é acumulado).
-- Se houver prejuízo acumulado, ele é abatido do lucro antes de calcular o imposto.
-- O imposto é 20% sobre o lucro tributável.
-
----
-
-## 6. Geração do Output
-
-- Para cada cenário, gera um array de objetos `{"tax": valor}`.
-- Serializa cada array de resultados em JSON.
-- Junta todos os cenários, separando por quebras de linha.
-- O output final é impresso ou retornado.
+## 5. Observações
+- O input deve ser um JSON válido, conforme exemplos na pasta `Inputs`.
+```sh
+[{ "operation": "buy",  "unit-cost": 10.00, "quantity": 100 },{ "operation": "sell", "unit-cost": 15.00, "quantity": 50 }]
+```
+- O output será impresso no terminal, um array JSON por linha de cenário processado.
+- O programa aceita tanto entrada interativa (linha a linha) quanto redirecionamento de arquivos.

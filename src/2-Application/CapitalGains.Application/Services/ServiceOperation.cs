@@ -112,7 +112,6 @@ public class ServiceOperation : IServiceOperation
     /// <param name="taxValue"></param>
     /// <param name="financialLoss"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    /// <returns></returns>
     private static void ProcessSell(Operation sellOperation, List<Operation> weightedAverageList, ref int quantityInWallet, ref float weightedAveragePrice, ref decimal taxValue, ref float financialLoss)
     {
         if (sellOperation.Quantity > quantityInWallet)

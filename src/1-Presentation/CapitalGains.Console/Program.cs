@@ -3,6 +3,7 @@ using CapitalGains.CrossCutting.AppServiceConfig;
 using CapitalGains.Application.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
+using System.Text;
 
 namespace CapitalGains.Console;
 
@@ -14,12 +15,16 @@ public static class Program
     {
         DependeciesInjection();
 
-        using var reader = new StreamReader(System.Console.OpenStandardInput());
-
-        string inputJson = await reader.ReadToEndAsync();
-        if (!string.IsNullOrWhiteSpace(inputJson))
+        var inputJson = new StringBuilder();
+        string line;
+        while ((line = System.Console.ReadLine()) != null && line != "")
         {
-            var resultOutputDateStocks = await _mediator.Send(new ProcessStocksCommand(inputJson.Trim()));
+            inputJson.AppendLine(line.Trim());
+        }
+        
+        if (!string.IsNullOrWhiteSpace(inputJson.ToString()))
+        {
+            var resultOutputDateStocks = await _mediator.Send(new ProcessStocksCommand(inputJson.ToString().Trim()));
             System.Console.WriteLine();
             System.Console.WriteLine(resultOutputDateStocks);
         }
